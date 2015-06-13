@@ -1,13 +1,29 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var Hapi = require('hapi');
+var server = new Hapi.Server();
+server.connection({ port: 3000 });
+
+var io = require('socket.io')(server.listener);
 
 // Holds the history of the chat, so
 // anyone joining can see the whole thing
 var history = [];
 
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+server.route({
+	method: 'GET',
+	path: '/{param*}',
+	handler: {
+		directory: {
+			path: __dirname
+		}
+	}
+});
+
+server.route({
+	method: 'GET',
+	path: '/',
+	handler: function(request, reply){
+  	reply.file(__dirname + '/index.html');
+  }
 });
 
 io.on('connection', function(socket){
@@ -20,6 +36,6 @@ io.on('connection', function(socket){
   });
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+server.start(function(){
+  console.log('listening at: ', server.info.uri);
 });

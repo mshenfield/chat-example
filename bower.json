@@ -1,0 +1,24 @@
+{
+  "name": "chat-example",
+  "main": "index.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/mshenfield/chat-example",
+  "authors": [
+    "Max Shenfield <shenfieldmax@gmail.com>"
+  ],
+  "keywords": [
+    "chat"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "js-cookie": "~1.5.1"
+  }
+}
