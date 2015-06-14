@@ -1,7 +1,7 @@
 var Hapi = require('hapi');
+var fs = require('fs');
 var server = new Hapi.Server();
 server.connection({ port: 3000 });
-
 var io = require('socket.io')(server.listener);
 
 // Holds the history of the chat, so
@@ -24,6 +24,24 @@ server.route({
 	handler: function(request, reply){
   	reply.file(__dirname + '/index.html');
   }
+});
+
+server.route({
+	method: 'GET',
+	path: '/emojies',
+	handler: function(request, reply){
+		var img_dir =  __dirname + '/bower_components/emojify.js/dist/images/basic';
+		fs.readdir(img_dir, function(err, files){
+			if(err) {
+				console.error(err);
+				reply
+			}
+			filenames = files.map(function(filename){
+				return { name: filename.replace('.png','') };
+			});
+			reply(filenames);
+		});
+	}
 });
 
 io.on('connection', function(socket){
