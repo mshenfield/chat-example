@@ -1,9 +1,5 @@
 // Setup emoji.js image directory
-var img_dir = 'bower_components/emojify.js/dist/images/basic/';
-emojify.setConfig({
-  img_dir: img_dir,
-  emoticons_enabled: false
-});
+var imgPath = 'bower_components/emojify.js/dist/images/basic/';
 
 $.getJSON('./emojies', function(data) {
 	$('#chat-input-area').atwho(
@@ -12,8 +8,9 @@ $.getJSON('./emojies', function(data) {
 	      at: ":",
 	      // Hit API endpoint for our emojies list
 	      data: './emojies',
-	      displayTpl: '<li><img src="' + img_dir + '${name}.png" class="emoji"></img> ${name} </li>',
-	  		insertTpl: ':${name}:',
+	      displayTpl: '<li><img src="//cdn.jsdelivr.net/emojione/assets/png/${unicode}.png?v=1.2.4" class="emoji"></img> ${shortname} </li>',
+	  		insertTpl: ':${shortname}:',
+        searchKey: 'shortname',
 	      limit: 20
 	  });
 })
@@ -47,11 +44,11 @@ $('#chat-input-area').keypress(function (e) {
 		if(e.charCode < FIRSTVISIBLECHARCODE) {
 			e.preventDefault();
 		}
-	} 
+	}
 	// Allow Shift+Enter, and pressing Enter to select an At autocompletion option
 	if(e.charCode === ENTERCHARCODE && !e.shiftKey && !isAutocompleting) {
 		e.preventDefault();
-		
+
 		if($('#chat-input-area').val() !== ''){
 		  $('#chat-form').submit();
 		}
@@ -93,6 +90,8 @@ function toggleButton() {
 }
 
 function addMessage(msg){
-	$('#messages').append($('<li>').text(msg.username + ": " + msg.text));
-	emojify.run();
+  msg.text = emojione.toImage(msg.text);
+  var li = $('<li>');
+  li.html(msg.username + ": " + msg.text);
+	$('#messages').append(li);
 }

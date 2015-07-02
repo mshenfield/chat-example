@@ -30,17 +30,18 @@ server.route({
 	method: 'GET',
 	path: '/emojies',
 	handler: function(request, reply){
-		var img_dir =  __dirname + '/bower_components/emojify.js/dist/images/basic';
-		fs.readdir(img_dir, function(err, files){
-			if(err) {
-				console.error(err);
-				reply
-			}
-			filenames = files.map(function(filename){
-				return { name: filename.replace('.png','') };
-			});
-			reply(filenames);
-		});
+		var emojiDescriptionsFilePath =  __dirname + '/bower_components/emojione/emoji_strategy.json';
+		var emojiDescriptions = JSON.parse(fs.readFileSync(emojiDescriptionsFilePath, 'utf8'));
+		var descriptionsNoKeys = [];
+		for(key in emojiDescriptions) {
+			description = emojiDescriptions[key]
+			// We want to be able to use this as a lookup key - so replace
+			// colons when pushing up
+			description["shortname"] = description["shortname"].replace(/:/gi, "");
+			descriptionsNoKeys.push(description);
+		}
+
+		reply(descriptionsNoKeys);
 	}
 });
 
