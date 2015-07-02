@@ -1,7 +1,7 @@
 var Hapi = require('hapi');
 var fs = require('fs');
 var server = new Hapi.Server();
-server.connection({ port: 3000 });
+server.connection({ port: process.env.PORT | 3000 });
 var io = require('socket.io')(server.listener);
 
 // Holds the history of the chat, so

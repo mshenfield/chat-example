@@ -4,23 +4,38 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
   font: 13px Helvetica, Arial;
+  min-height: 100vh;
+  height: 100vh;
+}
+
+/* Main flex box container (all other elements inherit flex from it) */
+#chat-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+#chat-input{
+  padding: 3px;
+  flex: 1 1 20%;
+  max-height: 20vh;
 }
 
 #chat-form {
   background: #000;
-  padding: 3px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
 }
 
-#chat-form input {
+#chat-form textarea {
+  position: relative;
   border: 0;
   padding: 10px;
   width: 90%;
-  margin-right: .5%;
+  margin-right: 1%;
+  top: 10px;
+  font-size: 13px;
 }
 
 #chat-form button {
@@ -31,17 +46,11 @@ body {
   bottom: 0px;
 }
 
-#chat-input-area {
-  width: 90%;
-  resize: none;
-  height: 44px;
-  margin-right: 1%;
-  position: relative;
-  top: 10px;
-  font-size: 13px;
+#messages-container {
+  overflow-x: scroll;
+  flex: 1 1 80%;
 }
 
-;
 #messages {
   list-style-type: none;
   margin: 0;
@@ -57,6 +66,7 @@ body {
   background: #eee;
 }
 
+/* Popup to enter username and password */
 #overlay {
   position: absolute;
   left: 0px;
@@ -79,6 +89,13 @@ body {
 .emojione {
   width: 3em;
   height: 3em;
+  display: inline-block;
+  margin-bottom: -0.25em;
+}
+
+.emojione.popup {
+  width: 1.5em;
+  height: 1.5em;
   display: inline-block;
   margin-bottom: -0.25em;
 }

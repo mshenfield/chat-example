@@ -15,12 +15,16 @@
         </form>
       </div>
     </div>
-    <ul id='messages'></ul>
-    <footer>
-      <form action='' id='chat-form'>
-        <textarea id='chat-input-area' autofocus></textarea><button>Send</button>
-      </form>
-    </footer>
+    <div id='chat-app'>
+      <div id='messages-container'>
+        <ul id='messages'></ul>
+      </div>
+      <footer id='chat='>
+        <form action='' id='chat-form'>
+          <textarea id='chat-input-area' autofocus></textarea><button>Send</button>
+        </form>
+      </footer>
+    </div>
     <script src='https://cdn.socket.io/socket.io-1.2.0.js'></script>
     <script src='bower_components/jquery/dist/jquery.js'></script>
     <script src='bower_components/Caret.js/dist/jquery.caret.js'></script>

@@ -8,7 +8,7 @@ $.getJSON('./emojies', function(data) {
 	      at: ":",
 	      // Hit API endpoint for our emojies list
 	      data: './emojies',
-	      displayTpl: '<li><img src="//cdn.jsdelivr.net/emojione/assets/png/${unicode}.png?v=1.2.4" class="emoji"></img> ${shortname} </li>',
+	      displayTpl: '<li><img src="//cdn.jsdelivr.net/emojione/assets/png/${unicode}.png?v=1.2.4" class="emojione popup"></img> ${shortname} </li>',
 	  		insertTpl: ':${shortname}:',
         searchKey: 'shortname',
 	      limit: 20
