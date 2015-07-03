@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "description": "my first socket.io app",
   "dependencies": {
+    "good": "^6.2.0",
+    "good-console": "^5.0.2",
     "hapi": "^8.6.1",
     "socket.io": "1.2.0"
   }

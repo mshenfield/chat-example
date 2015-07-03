@@ -1,7 +1,8 @@
 var Hapi = require('hapi');
+var Good = require('good');
 var fs = require('fs');
 var server = new Hapi.Server();
-server.connection({ port: process.env.PORT | 3000 });
+server.connection({ port: process.env.PORT || 3000 });
 var io = require('socket.io')(server.listener);
 
 // Holds the history of the chat, so
@@ -42,6 +43,23 @@ server.route({
 		}
 
 		reply(descriptionsNoKeys);
+	}
+});
+
+server.register({
+	register: Good,
+	options: {
+		reporters: [{
+			reporter: require('good-console'),
+			events: {
+				reponse: '*',
+				log: '*',
+			}
+		}]
+	}
+}, function (err) {
+	if (err) {
+		throw err;
 	}
 });
 
