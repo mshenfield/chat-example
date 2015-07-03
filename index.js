@@ -2,7 +2,7 @@ var Hapi = require('hapi');
 var Good = require('good');
 var fs = require('fs');
 var server = new Hapi.Server();
-server.connection({ port: process.env.PORT || 3000 });
+server.connection({ port: process.env.PORT || 3000, host: '0.0.0.0' });
 var io = require('socket.io')(server.listener);
 
 // Holds the history of the chat, so
@@ -52,7 +52,7 @@ server.register({
 		reporters: [{
 			reporter: require('good-console'),
 			events: {
-				reponse: '*',
+				response: '*',
 				log: '*',
 			}
 		}]
@@ -74,5 +74,5 @@ io.on('connection', function(socket){
 });
 
 server.start(function(){
-  console.log('listening at: ', server.info.uri);
+	server.log('listening at: ' +  server.info.uri);
 });
