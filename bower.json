@@ -20,6 +20,7 @@
   ],
   "dependencies": {
     "js-cookie": "~1.5.1",
-    "jquery.atwho": "~1.3.0"
+    "jquery.atwho": "~1.3.0",
+    "emojione": "~1.4.1"
   }
 }
