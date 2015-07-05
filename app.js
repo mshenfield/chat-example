@@ -1,3 +1,6 @@
+var KEYS  = {
+
+}
 // Setup emoji.js image directory
 var imgPath = 'bower_components/emojify.js/dist/images/basic/';
 
@@ -24,45 +27,68 @@ if(Cookies.get('username')){
 
 var socket = io();
 
-// Hook into automcomplete events to allow user to press enter
-// to both select an autocomplete option and submit form
-var isAutocompleting = false;
+// These variables toggle the users ability to enter text into
+// the textarea. They are reset to false whenever the form is submitted.
+var isInsertingEmoji = false;
+var isTypingRawText = false;
 $('#chat-input-area').on('shown.atwho', function(e) {
-	isAutocompleting = true;
+	isInsertingEmoji = true;
 });
 
 $('#chat-input-area').on('inserted.atwho', function(e) {
-	isAutocompleting = false;
+	isInsertingEmoji = false;
 });
 
 var FIRSTVISIBLECHARCODE = 33 // 0
 var COLONCHARCODE = 58;
 var ENTERCHARCODE = 13;
+var DOUBLEQUOTE = 34;
+
 $('#chat-input-area').keypress(function (e) {
-	if(isAutocompleting){
+	// Handles all emojie
+	if(isInsertingEmoji){
 		// Disable whitespaces characters inside of autocompletion
 		if(e.charCode < FIRSTVISIBLECHARCODE) {
 			e.preventDefault();
 		}
+		return;
 	}
-	// Allow Shift+Enter, and pressing Enter to select an At autocompletion option
-	if(e.charCode === ENTERCHARCODE && !e.shiftKey && !isAutocompleting) {
+
+	// Toggle isTypingRawText on DOUBLEQUOTE (")
+	if(e.charCode === DOUBLEQUOTE) {
+		isTypingRawText = !isTypingRawText;
+	}
+
+	// Allow anything inside raw text delimeter
+	if(isTypingRawText){
+		return;
+	}
+
+	// Override Enter to submit the chat form (if it isn't empty)
+	// Don't prevent default on Shift+Enter, insert a newline.
+	if(e.charCode === ENTERCHARCODE && !e.shiftKey) {
 		e.preventDefault();
 
 		if($('#chat-input-area').val() !== ''){
 		  $('#chat-form').submit();
 		}
+		return;
 	}
 
-	// Only emojies and whitespace
-	if(e.charCode !== COLONCHARCODE && e.charCode >= FIRSTVISIBLECHARCODE && !isAutocompleting){
+	// Prevents character entry unless autocompleting is turned on or whitespace
+	// Since we've registered and At.js handle on ":", entering it will
+	// toggle on IsInsertingEmoji to True
+	if(e.charCode !== COLONCHARCODE && e.charCode !== DOUBLEQUOTE && e.charCode >= FIRSTVISIBLECHARCODE){
 		e.preventDefault();
+		return;
 	}
 });
 
 $('form').submit(function(){
 	socket.emit('chat message', {username: Cookies.get('username'), text: $('#chat-input-area').val()} );
 	$('#chat-input-area').val('');
+	IsInsertingEmoji = false;
+	isTypingRawText = false;
 	return false;
 });
 
@@ -90,7 +116,7 @@ function toggleButton() {
 }
 
 function addMessage(msg){
-  msg.text = emojione.toImage(msg.text);
+  msg.text = emojione.toImage(msg.text).replace(/"/gi, '');
   var li = $('<li>');
   li.html(msg.username + ": " + msg.text);
 	$('#messages').append(li);
